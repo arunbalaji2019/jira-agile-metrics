@@ -550,8 +550,6 @@ To only show the 6 most recent periods (e.g. weeks) in the chart:
 Shows the difference between arrivals and departures week on week. In a
 perfectly stable system, the net flow would be 0.
 
-![](./docs/images/net-flow.png)
-
 In the configuration file:
 
         Net flow chart: net-flow.png

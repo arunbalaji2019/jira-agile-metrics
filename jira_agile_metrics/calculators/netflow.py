@@ -69,7 +69,7 @@ class NetFlowChartCalculator(Calculator):
             ax.set_title(self.settings["net_flow_chart_title"])
 
         ax.set_xlabel("Period starting")
-        ax.set_ylabel("Net flow (departures - arrivals)")
+        ax.set_ylabel("Net flow (arrivals - departures)")
 
         net_flow_data = chart_data[["net_flow", "positive"]]
 
