@@ -3,6 +3,7 @@ import datetime
 from pandas import DataFrame, Timestamp, date_range
 
 from .cfd import CFDCalculator
+from . import netflow
 from .netflow import NetFlowChartCalculator
 
 from ..utils import extend_dict
@@ -246,3 +247,29 @@ def test_calculate_net_flow_different_columns(
             "positive": True,
         },
     ]
+
+
+def test_write_y_axis_label_matches_net_flow(
+    query_manager, settings, results, tmp_path, mocker
+):
+
+    settings.update(
+        {
+            "net_flow_chart": str(tmp_path / "netflow.png"),
+            "net_flow_chart_title": "Net flow",
+            "net_flow_window": None,
+            "date_format": "%d/%m/%Y",
+        }
+    )
+
+    calculator = NetFlowChartCalculator(query_manager, settings, results)
+
+    data = calculator.run()
+    results[NetFlowChartCalculator] = data
+
+    subplots = mocker.spy(netflow.plt, "subplots")
+    calculator.write()
+    _, ax = subplots.spy_return
+
+    assert (data["net_flow"] == data["arrivals"] - data["departures"]).all()
+    assert ax.get_ylabel() == "Net flow (arrivals - departures)"
